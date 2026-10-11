@@ -4,8 +4,9 @@
 
 int main() 
 {
+    enableDebugMode();
     an_actual_array* x = newArray();
-    printf("say hello to x! it's at %p\n", x);
+    printf("say hello to x!");
     appendInt(x, 70);
     appendInt(x, 70);
     appendInt(x, 70);
@@ -20,7 +21,7 @@ int main()
 
     an_actual_array* y = newArray();
 
-    printf("say hello to y! it's at %p\n", y);
+    printf("say hello to y!");
 
     for (int i=0; i < 70; i++)
     {
@@ -41,6 +42,8 @@ int main()
     freeEveryArray();
 
     freeEveryArray();
+
+
 
     printf("i exited the program without any issue or error whatso ever");
     return 0;
