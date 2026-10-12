@@ -168,7 +168,7 @@ void debugArray(an_actual_array* array)
     printf("malloc size: %zu\n", array->malloc_size);
     for (size_t i = 0;i<array->size;i++)
     {
-        printf("%d: ", i);
+        printf("%zu: ", i);
         printf("%d", array->array[i]);
         printf(" ,");
     }
