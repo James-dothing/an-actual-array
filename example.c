@@ -43,7 +43,26 @@ int main()
 
     freeEveryArray();
 
+    an_actual_array* a = newArray();
+    enableDebugMode();
+    an_actual_array* b = newArray();
+    an_actual_array* c = newArray();
+    printf("array: %p\n", x->array);
+    freeArray(b);
+    freeEveryArray();
 
+    an_actual_array* d = newArray();
+    appendInt(d, 10); // index = 0
+    appendInt(d, 20); // index = 1
+    appendInt(d, 30); // index = 2
+    appendInt(d, 40); // index = 3
+    appendInt(d, 50); // index = 4
+    appendInt(d, 60); // index = 5
+    removeInt(d, 3);
+    debugArray(d);
+    insertInt(d, 100, 3);
+    debugArray(d);
+    freeArray(d);
 
     printf("i exited the program without any issue or error whatso ever");
     return 0;

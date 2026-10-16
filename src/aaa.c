@@ -2,6 +2,7 @@
 // https://github.com/James-dothing/an-actual-array
 //TO DO LIST:
 //add more function
+//add optimize version
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,6 +61,16 @@ void freeEveryArray()
             every_array.array[i] = NULL;
         }
         every_array.size = 0;
+        an_actual_array** temp = realloc(every_array.array, 8 * sizeof(an_actual_array*));
+        if (temp)
+        {
+            every_array.malloc_size = 8;
+            every_array.array = temp;
+        } else if (debug_mode == 1)
+        {
+            printf("can not realloc for somereason\n-from freeEveryArray() function\n");
+        }
+        
     }
 }
 
@@ -68,7 +79,7 @@ an_actual_array* newArray()
     int* pseudo_array = malloc(8 * sizeof(int));
     if (!pseudo_array)
     {
-        printf("failed to alocate memory");
+        printf("failed to alocate memory\n-from newArray() function");
         exit(1);
     }
 
@@ -85,6 +96,38 @@ an_actual_array* newArray()
     return new;
 }
 
+void freeArray(an_actual_array *array)
+{
+    if (every_array.size <= 0)
+    {
+        printf("your array doesn't exist!\nmake sure to create an array using newArray()\nand also make sure that the array is still exist and not freed already\n-from freeArray() function");
+        exit(1);
+    }
+    int i = 0;
+    while (every_array.array[i] != array)
+    {
+        i++;
+        if (i >= every_array.size)
+        {
+            printf("your array doesn't exist!\nmake sure to create an array using newArray()\nand also make sure that the array is still exist and not freed already\n-from freeArray() function");
+            exit(1);
+        }
+    }
+    while (i+1 < every_array.size)
+    {
+        i++;
+        every_array.array[i-1] = every_array.array[i];
+    }
+    every_array.size -= 1;
+    if (debug_mode == 1)
+    {
+        printf("RAHHH I FREED %p\n", array->array);
+        printf("RAHHH I FREED %p\n", array);
+    }
+    free(array->array);
+    free(array);
+}
+
 void appendInt(an_actual_array *array, int item)
 {
     if (array->size == array->malloc_size)
@@ -93,7 +136,7 @@ void appendInt(an_actual_array *array, int item)
         int* temp = realloc(array->array, array->malloc_size * sizeof(int));
         if (!temp)
         {
-            printf("failed to alocate memory");
+            printf("failed to alocate memory\n-from appendInt() function");
             exit(1);
         }
         array->array = temp;
@@ -102,7 +145,7 @@ void appendInt(an_actual_array *array, int item)
     array->size++;
 }
 
-int getItem(an_actual_array *array, int index)
+int getInt(an_actual_array *array, int index)
 {
     if (index < 0)
     {
@@ -117,26 +160,26 @@ int getItem(an_actual_array *array, int index)
     exit(1);
 }
 
-int getLength(an_actual_array* array)
+size_t getLength(an_actual_array* array)
 {
-    return (int)array->size;
+    return array->size;
 }
 
 void replaceInt(an_actual_array *array, int item, int index)
 {
     if (index < 0 || index >= array->size)
     {
-        printf("index out of range");
+        printf("index out of range\n-from replaceInt() function");
         exit(1);
     }
     array->array[index] = item;
 }
 
-void insertItem(an_actual_array *array, int item, int index)
+void insertInt(an_actual_array *array, int item, int index)
 {
     if (index < 0)
     {
-        printf("index is out of range (index is negative)");
+        printf("index is out of range (index is negative)\n-from insertInt() function");
         exit(1);
     }
     if (index < array->size)
@@ -158,8 +201,24 @@ void insertItem(an_actual_array *array, int item, int index)
         appendInt(array, item);
     } else // index > array->size
     {
-
+        printf("index is out of range (index is more than the array size)\n-from insertInt() function");
+        exit(1);
     }
+}
+
+void removeInt(an_actual_array* array, int index)
+{
+    if (index >= array->size || index < 0)
+    {
+        printf("index out of range!\n-from removeInt() function");
+        exit(1);
+    }
+    while (index+1 < array->size)
+    {
+        index++;
+        array->array[index-1] = array->array[index];
+    }
+    array->size -= 1;
 }
 
 void debugArray(an_actual_array* array)
